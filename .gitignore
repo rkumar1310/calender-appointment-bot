@@ -89,3 +89,9 @@ target/
 
 # Exlcude the database file
 .db
+
+# Environment Files
+.env
+
+# Exclude the venv folder
+venv/

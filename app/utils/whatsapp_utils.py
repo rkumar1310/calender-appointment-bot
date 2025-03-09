@@ -3,7 +3,7 @@ from flask import current_app, jsonify
 import json
 import requests
 
-# from app.services.openai_service import generate_response
+from app.services.openai_service import generate_response
 import re
 
 
@@ -25,9 +25,9 @@ def get_text_message_input(recipient, text):
     )
 
 
-def generate_response(response):
-    # Return text in uppercase
-    return response.upper()
+# def generate_response(response):
+#     # Return text in uppercase
+#     return response.upper()
 
 
 def send_message(data):
@@ -35,6 +35,8 @@ def send_message(data):
         "Content-type": "application/json",
         "Authorization": f"Bearer {current_app.config['ACCESS_TOKEN']}",
     }
+
+    print(headers)
 
     url = f"https://graph.facebook.com/{current_app.config['VERSION']}/{current_app.config['PHONE_NUMBER_ID']}/messages"
 
@@ -83,13 +85,14 @@ def process_whatsapp_message(body):
     message_body = message["text"]["body"]
 
     # TODO: implement custom function here
-    response = generate_response(message_body)
+    # response = generate_response(message_body)
 
     # OpenAI Integration
-    # response = generate_response(message_body, wa_id, name)
-    # response = process_text_for_whatsapp(response)
+    response = generate_response(message_body, wa_id, name)
+    response = process_text_for_whatsapp(response)
 
     data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
+    print(data)
     send_message(data)
 
 
